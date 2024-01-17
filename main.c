@@ -14,7 +14,7 @@ struct Estudantes {
 //funcao que adiciona dados ao arquivo
 void adicionar() {
 
-    struct Estudantes studen; // cria um ocorencia do objt em RAM
+    struct Estudantes studen; // cria um ocorencia do obj em RAM
 
     FILE *Open;
     Open = fopen("file.dat", "rb+");
@@ -72,15 +72,15 @@ void  listar() {
 
         fseek(Open, 0, SEEK_SET);
 
-        int naoSei = 0; //enquanto existem registros
+        int maisRegistros = 0; //enquanto existem registros
 
         printf("Nome \tIdade\tAno\tStatus de Matricula\n");
 
-        while(!naoSei) {
+        while(!maisRegistros) {
             
             fread(&studen, sizeof(struct Estudantes), 1, Open);
 
-            if(feof(Open)) naoSei=1;
+            if(feof(Open)) maisRegistros = 1;
 
             else {
                 printf("%s\t%d\t%d\t%s\n",
@@ -97,6 +97,11 @@ void  listar() {
     }
 };
 
+//funcao de editar os registros
+void editar() {
+
+}
+
 //funcao que apaga registros
 void apagar() {
 
@@ -112,7 +117,7 @@ int main() {
 
     do {
         //opcoes do menu
-        printf("\n1-Adicionar Estudante\n2-Listar Estudantes\n3-Sair\n");
+        printf("\n1-Adicionar Estudante\n2-Listar Estudantes\n3-Editar\n4-Apagar\n5-Sair\n");
 
         //ler acao do usuario
         scanf("%d", &menu);
@@ -125,7 +130,13 @@ int main() {
         if(menu == 2) {
             listar();
         }
-    } while(menu != 3);
+        if(menu == 3) {
+            editar();
+        }
+        if(menu == 4) {
+            apagar();
+        }
+    } while(menu != 5);
     printf("Programa encerrado!");
     
 
