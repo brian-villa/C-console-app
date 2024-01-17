@@ -5,9 +5,10 @@
 
 //informacao dos estudantes
 struct Estudantes {
+    int id;
     char nome[100];
     int idade;
-    int ano; // ano em que está a cursar ativo // formado ou ainda estudante
+    int ano; 
     char status[20]; // ativo ou formado
 };
 
@@ -26,6 +27,10 @@ void adicionar() {
     };
 
     //Preencher informacoes
+    printf("Defina o ID para o estudante: ");
+    scanf("%d", &studen.id);
+    fgetc(stdin);
+
     printf("Digite o nome do estudante: ");
     gets(studen.nome);
 
@@ -36,7 +41,6 @@ void adicionar() {
     printf("Digite o ano de ingresso do estudante: ");
     scanf("%d", &studen.ano);
     fgetc(stdin);
-
 
     //validar ano de ingresso
     if(studen.ano < 2021) { // ano menor que 2021 licenciatura concluída
@@ -74,7 +78,7 @@ void  listar() {
 
         int maisRegistros = 0; //enquanto existem registros
 
-        printf("Nome \tIdade\tAno\tStatus de Matricula\n");
+        printf("Id \tNome\tIdade\tAno\tStatus de Matricula\n");
 
         while(!maisRegistros) {
             
@@ -83,7 +87,8 @@ void  listar() {
             if(feof(Open)) maisRegistros = 1;
 
             else {
-                printf("%s\t%d\t%d\t%s\n",
+                printf("%d\t%s\t%d\t%d\t%s\n",
+                studen.id,
                 studen.nome,
                 studen.idade,
                 studen.ano,
@@ -99,9 +104,53 @@ void  listar() {
 
 //funcao de editar os registros
 void editar() {
+    struct Estudantes studen;
 
+    FILE *Open;
+    Open = fopen("file.dat", "rb+");
+
+    if (!Open) {
+        printf("Erro ao abrir o arquivo.\n");
+    }
+
+    int idBusca;
+
+    //solicitar nome no registro para ser alterado
+    printf("Digite o id para ser alterado no registro: ");
+    scanf("%d", &idBusca);
+
+    //calcular a posição do registro no arquivo
+    long posicaoRegistro = (idBusca - 1) * sizeof(struct Estudantes);
+
+    //mover ponteiro para a posicao do registro
+    fseek(Open, posicaoRegistro, SEEK_SET);
+
+    //ler 
+    fread(&studen, sizeof(struct Estudantes), 1, Open);
+
+    //registro encontrado?
+    if(feof(Open)) {
+        printf("Registro não encontrado");
+        fclose(Open);
+    }
+
+    //alteraçao registro
+    printf("digite um novo nome: ");
+    scanf("%d", &studen.idade);
+
+    //mover de volta para posicao do registro
+    fseek(Open, -sizeof(struct Estudantes), SEEK_CUR);
+    
+    //gravar registro
+    fwrite(&studen, sizeof(struct Estudantes), 1, Open);
+
+    //fechar ficheiro
+    fclose(Open);
+
+    
+    
 }
-
+    
 //funcao que apaga registros
 void apagar() {
 
